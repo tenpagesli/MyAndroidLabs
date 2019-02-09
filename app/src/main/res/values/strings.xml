@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Lab3</string>
+    <string name="hello_message">Hello World!</string>
+    <string name="MyWidgetsText">Here are my widgets:</string>
+    <string name="ButtonText">Button</string>
+    <string name="CheckOutMessage">Check this out!</string>
+    <string name="SwitchMessage">Switch on / off</string>
+    <string name="HintMessage">Type your answer here</string>
+    <string name="picDescription">Chinese Flag</string>
+    <string name="Email">Enter your email address:</string>
+    <string name="email_hint">Type email here</string>
+    <string name="password">Type our password:</string>
+    <string name="login_button">LOGIN</string>
+    <string name="profile">Your profile</string>
+    <string name="name">Your name:</string>
+    <string name="name_hint">Enter your name</string>
+    <string name="email">Your Email:</string>
+    <string name="email_hint2">Enter your email</string>
+    <string name="picture">Your picture:</string>
+    <string name="pic_hint">Click the button above to take a picture</string>
+    <string name="goChatBtn">Go To Chat</string>
+</resources>

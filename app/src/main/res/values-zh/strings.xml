@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lab3</string>
+    <string name="hello_message">你好!</string>
+    <string name="MyWidgetsText">这是我的小部件:</string>
+    <string name="ButtonText">按键</string>
+    <string name="CheckOutMessage">点这里看看！</string>
+    <string name="SwitchMessage">开关 开 / 关</string>
+    <string name="HintMessage">在这里输入你的答案</string>
+    <string name="picDescription">中国国旗</string>
+    <string name="Email">输入你的电子邮件：</string>
+    <string name="email_hint">在此输入邮箱地址</string>
+    <string name="password">输入你的密码：</string>
+    <string name="login_button">登录</string>
+    <string name="profile">你的信息</string>
+    <string name="name">你的名字：</string>
+    <string name="name_hint">请输入你的名字</string>
+    <string name="email">你的邮箱：</string>
+    <string name="email_hint2">请输入你的邮箱</string>
+    <string name="picture">你的照片:</string>
+    <string name="pic_hint">点击上面的按钮来照一张照片</string>
+    <string name="goChatBtn">去聊天</string>
+</resources>
