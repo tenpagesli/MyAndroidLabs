@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lab3</string>
+    <string name="app_name">Lab4</string>
     <string name="hello_message">Hello World!</string>
     <string name="MyWidgetsText">Here are my widgets:</string>
     <string name="ButtonText">Button</string>
@@ -19,5 +19,8 @@
     <string name="picture">Your picture:</string>
     <string name="pic_hint">Click the button above to take a picture</string>
     <string name="goChatBtn">Go To Chat</string>
-    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="sendBtn">SEND</string>
+    <string name="receiveBtn">RECEIVE</string>
+    <string name="input_hint">Type here</string>
+    <string name="title_activity_chat_room">ChatRoomActivity</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lab3</string>
+    <string name="app_name">Lab4</string>
     <string name="hello_message">你好!</string>
     <string name="MyWidgetsText">这是我的小部件:</string>
     <string name="ButtonText">按键</string>
@@ -20,4 +20,7 @@
     <string name="picture">你的照片:</string>
     <string name="pic_hint">点击上面的按钮来照一张照片</string>
     <string name="goChatBtn">去聊天</string>
+    <string name="sendBtn">发送</string>
+    <string name="receiveBtn">接收</string>
+    <string name="input_hint">在这里输入。。。</string>
 </resources>
