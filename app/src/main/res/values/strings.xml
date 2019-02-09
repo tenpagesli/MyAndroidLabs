@@ -22,5 +22,4 @@
     <string name="sendBtn">SEND</string>
     <string name="receiveBtn">RECEIVE</string>
     <string name="input_hint">Type here</string>
-    <string name="title_activity_chat_room">ChatRoomActivity</string>
 </resources>
