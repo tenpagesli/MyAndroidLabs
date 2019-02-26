@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -41,6 +42,12 @@ public class ProfileActivity extends AppCompatActivity {
         // add on click listener for button
         mImageButton = findViewById(R.id.picButton);
         mImageButton.setOnClickListener ( b -> {dispatchTakePictureIntent();});
+
+        Button goChatBtn = findViewById(R.id.goChat);
+        goChatBtn.setOnClickListener((e)->{
+            Intent nextPage = new Intent(ProfileActivity.this, ChatRoomActivity.class);
+            startActivity(nextPage);
+        });
     }
 
     @Override

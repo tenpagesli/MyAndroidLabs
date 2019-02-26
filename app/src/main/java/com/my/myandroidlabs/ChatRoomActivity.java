@@ -11,124 +11,122 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ChatRoomActivity extends AppCompatActivity {
-    // how many items will show up at the chat room page
-    int numObjects = 6;
+    private Message msg;
+    ArrayList<Message> msgList;
+    ListView theList;
+    TextView content;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // get the adapter
-        ListAdapter adt = new MyOwnAdapter();
         // get layout xml object
         setContentView(R.layout.activity_chat_room);
-        // get the "ListView" object
-        ListView theList = (ListView)findViewById(R.id.the_list);
-        theList.setAdapter(adt);
-        //This listens for items being clicked in the list view
-        theList.setOnItemClickListener(( parent,  view,  position,  id) -> {
-            Log.e("you clicked on :" , "item "+ position);
+        // get message array list
+        if (msgList == null) {
+            msgList = new ArrayList<>();
+        }
 
-            numObjects = 20;
-            ((MyOwnAdapter) adt).notifyDataSetChanged();
+        // get the "ListView" object
+        theList = (ListView) findViewById(R.id.the_list);
+        // get two buttons, and set on click listener for them
+        Button sendBtn = findViewById(R.id.sendBtn);
+        Button receiveBtn = findViewById(R.id.receiveBtn);
+        // get chat content for message object
+        TextView chatContent = findViewById(R.id.chatContent);
+
+        // get the adapter
+        ListAdapter adt = new ChatAdapter(msgList);
+        theList.setAdapter(adt);
+
+        sendBtn.setOnClickListener((e) -> {
+            Log.e("you clicked on :", " send button");
+            msg = new Message(chatContent.getText().toString(), 1);
+            msgList.add(msg);
+            //this restarts the process of getCount() and getView()
+            ((ChatAdapter) adt).notifyDataSetChanged();
+            // reset textView to null
+            chatContent.setText(null);
+        });
+
+        receiveBtn.setOnClickListener((e) -> {
+            Log.e("you clicked on :", " receive button");
+            msg = new Message(chatContent.getText().toString(), 2);
+            msgList.add(msg);
+            ((ChatAdapter) adt).notifyDataSetChanged();
+            // reset textView to null
+            chatContent.setText(null);
         });
     }
 
     //This class needs 4 functions to work properly:
-    protected class MyOwnAdapter extends BaseAdapter
-    {
-
-        @Override
-        public int getCount() {
-            return numObjects;
-        }
-
-        public Object getItem(int position){
-            return "SHow this in row "+ position;
-        }
-
-        public View getView(int position, View old, ViewGroup parent)
-        {
-            LayoutInflater inflater = getLayoutInflater();
-
-            View newView = inflater.inflate(R.layout.single_row, parent, false );
-
-
-            TextView rowText = (TextView)newView.findViewById(R.id.textOnRow);
-            String stringToShow = getItem(position).toString();
-            rowText.setText( stringToShow );
-            //return the row:
-            return newView;
-        }
-
-        public long getItemId(int position)
-        {
-            return position;
-        }
-    }
-
-    //A copy of ArrayAdapter. You just give it an array and it will do the rest of the work.
-    protected class MyArrayAdapter<E> extends BaseAdapter
-    {
+    protected class ChatAdapter<E> extends BaseAdapter {
         private List<E> dataCopy = null;
 
         //Keep a reference to the data:
-        public MyArrayAdapter(List<E> originalData)
-        {
+        public ChatAdapter(List<E> originalData) {
             dataCopy = originalData;
         }
 
         //You can give it an array
-        public MyArrayAdapter(E [] array)
-        {
+        public ChatAdapter(E[] array) {
             dataCopy = Arrays.asList(array);
         }
 
+        public ChatAdapter() {
+        }
 
-        //Tells the list how many elements to display:
-        public int getCount()
-        {
+        // return how many items to display
+        @Override
+        public int getCount() {
             return dataCopy.size();
         }
 
-
-        public E getItem(int position){
+        // return the contents will show up in each row
+        @Override
+        public E getItem(int position) {
             return dataCopy.get(position);
         }
 
-        public View getView(int position, View old, ViewGroup parent)
-        {
-            //get an object to load a layout:
+        /***
+         *  this method set up the view that will be added to the bottom of the view list
+         *   @param position: locates the one that will be add to the bottom
+         *   @return the new view
+         **/
+        @Override
+        public View getView(int position, View old, ViewGroup parent) {
+            View newView = null;
             LayoutInflater inflater = getLayoutInflater();
-
-            //Recycle views if possible:
-            TextView root = (TextView)old;
-            //If there are no spare layouts, load a new one:
-            if(old == null)
-                root = (TextView)inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
-
+            msg = (Message)getItem(position);
+            if (msg.getMessageDirection() == 1) {
+                newView = inflater.inflate(R.layout.sender_row, parent, false);
+                content = (TextView) newView.findViewById(R.id.sendContent);
+            }
+            if (msg.getMessageDirection() == 2) {
+                // Locate the layout (single_row), and add it to the bottom of current listView
+                newView = inflater.inflate(R.layout.receiver_row, parent, false);
+                content = (TextView) newView.findViewById(R.id.receiveContent);
+            }
             //Get the string to go in row: position
             String toDisplay = getItem(position).toString();
-
             //Set the text of the text view
-            root.setText(toDisplay);
-
-            //Return the text view:
-            return root;
+            content.setText(toDisplay);
+            return newView;
         }
 
-
-        //Return 0 for now. We will change this when using databases
-        public long getItemId(int position)
-        {
+        // get the item id for a specific position in the view list.
+        @Override
+        public long getItemId(int position) {
             return 0;
         }
     }
-
 }
