@@ -1,11 +1,10 @@
 package com.my.myandroidlabs;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     ListView theList;
     TextView content;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +35,12 @@ public class ChatRoomActivity extends AppCompatActivity {
         if (msgList == null) {
             msgList = new ArrayList<>();
         }
+
+        //get a database:
+        MyDatabaseOpenHelper dbOpener = new MyDatabaseOpenHelper(this);
+        SQLiteDatabase db = dbOpener.getWritableDatabase();
+        // find all data and put them into message list
+        this.findAllData(db);
 
         // get the "ListView" object
         theList = (ListView) findViewById(R.id.the_list);
@@ -47,25 +53,66 @@ public class ChatRoomActivity extends AppCompatActivity {
         // get the adapter
         ListAdapter adt = new ChatAdapter(msgList);
         theList.setAdapter(adt);
+        if(!msgList.isEmpty()){
+            ((ChatAdapter) adt).notifyDataSetChanged();
+        }
 
         sendBtn.setOnClickListener((e) -> {
             Log.e("you clicked on :", " send button");
-            msg = new Message(chatContent.getText().toString(), 1);
-            msgList.add(msg);
-            //this restarts the process of getCount() and getView()
-            ((ChatAdapter) adt).notifyDataSetChanged();
-            // reset textView to null
-            chatContent.setText(null);
+            this.sendMessage(db, chatContent,  adt, true);
         });
 
         receiveBtn.setOnClickListener((e) -> {
             Log.e("you clicked on :", " receive button");
-            msg = new Message(chatContent.getText().toString(), 2);
-            msgList.add(msg);
-            ((ChatAdapter) adt).notifyDataSetChanged();
-            // reset textView to null
-            chatContent.setText(null);
+            // get the last message's id
+            this.sendMessage(db, chatContent,  adt, false);
         });
+    }
+
+    private void sendMessage(SQLiteDatabase db, TextView chatContent,  ListAdapter adt, boolean clickOnSentBtn){
+        // get message content
+        String content = chatContent.getText().toString();
+
+        //add to the database and get the new ID
+        ContentValues newRowValues = new ContentValues();
+        //put string name in the NAME column:
+        newRowValues.put(MyDatabaseOpenHelper.COL_CONTENT, content);
+        //put string email in the EMAIL column:
+        newRowValues.put(MyDatabaseOpenHelper.COL_IS_SENT, clickOnSentBtn);
+        //insert in the database:
+        long newId = db.insert(MyDatabaseOpenHelper.TABLE_NAME, null, newRowValues);
+
+        // create Message Object and add it to the list
+        msg = new Message( newId,content , clickOnSentBtn);
+        msgList.add(msg);
+        // update ListView
+        ((ChatAdapter) adt).notifyDataSetChanged();
+        // reset textView to null
+        chatContent.setText(null);
+    }
+
+    // to find all the data, and put them into message list
+    private void findAllData(SQLiteDatabase db){
+        Log.e("you ", " are looking for all the data");
+        //query all the results from the database:
+        String [] columns = {MyDatabaseOpenHelper.COL_ID, MyDatabaseOpenHelper.COL_CONTENT, MyDatabaseOpenHelper.COL_IS_SENT};
+        Cursor results = db.query(false, MyDatabaseOpenHelper.TABLE_NAME, columns, null, null, null, null, null, null);
+        //find the column indices:
+        int idColIndex = results.getColumnIndex(MyDatabaseOpenHelper.COL_ID);
+        int contentColumnIndex = results.getColumnIndex(MyDatabaseOpenHelper.COL_CONTENT);
+        int isSentColIndex = results.getColumnIndex(MyDatabaseOpenHelper.COL_IS_SENT);
+        //iterate over the results, return true if there is a next item:
+        while(results.moveToNext())
+        {
+            boolean isSent = false;
+            long id = results.getLong(idColIndex);
+            String content = results.getString(contentColumnIndex);
+            if(Integer.valueOf(results.getString(isSentColIndex))==1){ // 1: true
+                isSent = true;
+            }
+            //add the new Contact to the array list:
+            msgList.add(new Message(id, content, isSent));
+        }
     }
 
     //This class needs 4 functions to work properly:
@@ -97,6 +144,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             return dataCopy.get(position);
         }
 
+
         /***
          *  this method set up the view that will be added to the bottom of the view list
          *   @param position: locates the one that will be add to the bottom
@@ -107,11 +155,10 @@ public class ChatRoomActivity extends AppCompatActivity {
             View newView = null;
             LayoutInflater inflater = getLayoutInflater();
             msg = (Message)getItem(position);
-            if (msg.getMessageDirection() == 1) {
+            if (msg.isSent()) {
                 newView = inflater.inflate(R.layout.sender_row, parent, false);
                 content = (TextView) newView.findViewById(R.id.sendContent);
-            }
-            if (msg.getMessageDirection() == 2) {
+            }else{
                 // Locate the layout (single_row), and add it to the bottom of current listView
                 newView = inflater.inflate(R.layout.receiver_row, parent, false);
                 content = (TextView) newView.findViewById(R.id.receiveContent);

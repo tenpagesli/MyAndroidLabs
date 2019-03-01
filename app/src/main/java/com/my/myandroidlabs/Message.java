@@ -1,17 +1,29 @@
 package com.my.myandroidlabs;
 
+import java.util.Objects;
+
 public class Message {
 
+    long id; // the id that will be stored in database
     private String content;
-    private int messageDirection; // 1: send;  2: receive
+    private boolean isSent; //
 
-    public Message() {
-        this(null, -1);
+    public Message(long id, String content, boolean isSent) {
+        this.id = id;
+        this.content = content;
+        this.isSent = isSent;
     }
 
-    public Message(String content, int messageDirection) {
-        this.setContent(content);
-        this.setMessageDirection(messageDirection);
+    public Message() {
+        this(-1, null, false);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    private void setId(long id) {
+        this.id = id;
     }
 
     public String getContent() {
@@ -22,16 +34,31 @@ public class Message {
         this.content = content;
     }
 
-    public int getMessageDirection() {
-        return messageDirection;
+    public boolean isSent() {
+        return isSent;
     }
 
-    private void setMessageDirection(int messageDirection) {
-        this.messageDirection = messageDirection;
+    private void setSent(boolean sent) {
+        isSent = sent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return getId() == message.getId() &&
+                isSent() == message.isSent() &&
+                Objects.equals(getContent(), message.getContent());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getContent(), isSent());
     }
 
     @Override
     public String toString() {
-        return this.getContent();
+        return content;
     }
 }
