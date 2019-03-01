@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,17 +60,19 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         sendBtn.setOnClickListener((e) -> {
             Log.e("you clicked on :", " send button");
-            this.sendMessage(db, chatContent,  adt, true);
+            this.sendMessage(db, chatContent,  adt, true, sendBtn);
         });
 
         receiveBtn.setOnClickListener((e) -> {
             Log.e("you clicked on :", " receive button");
             // get the last message's id
-            this.sendMessage(db, chatContent,  adt, false);
+            this.sendMessage(db, chatContent,  adt, false, receiveBtn);
+
         });
     }
 
-    private void sendMessage(SQLiteDatabase db, TextView chatContent,  ListAdapter adt, boolean clickOnSentBtn){
+    private void sendMessage(SQLiteDatabase db, TextView chatContent,  ListAdapter adt,
+                             boolean clickOnSentBtn, Button buttonClicked){
         // get message content
         String content = chatContent.getText().toString();
 
@@ -89,6 +92,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         ((ChatAdapter) adt).notifyDataSetChanged();
         // reset textView to null
         chatContent.setText(null);
+        //show a notification: first parameter is any view on screen. second parameter is the text. Third parameter is the length (SHORT/LONG)
+        Snackbar.make(buttonClicked, "Inserted item id:"+newId, Snackbar.LENGTH_LONG).show();
     }
 
     // to find all the data, and put them into message list
@@ -146,7 +151,8 @@ public class ChatRoomActivity extends AppCompatActivity {
 
 
         /***
-         *  this method set up the view that will be added to the bottom of the view list
+         *  this method set up and add the view that will be added to the bottom of the view list.
+         *  Thsi method will be run list.size() times
          *   @param position: locates the one that will be add to the bottom
          *   @return the new view
          **/
