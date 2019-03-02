@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lab4</string>
+    <string name="app_name">Lab5</string>
     <string name="hello_message">你好!</string>
     <string name="MyWidgetsText">这是我的小部件:</string>
     <string name="ButtonText">按键</string>

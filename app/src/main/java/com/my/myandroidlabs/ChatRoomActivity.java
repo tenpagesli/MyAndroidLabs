@@ -25,7 +25,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     ArrayList<Message> msgList;
     ListView theList;
     TextView content;
-
+    //get a database:
+    MyDatabaseOpenHelper dbOpener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +39,10 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
 
         //get a database:
-        MyDatabaseOpenHelper dbOpener = new MyDatabaseOpenHelper(this);
+        dbOpener = new MyDatabaseOpenHelper(this);
         SQLiteDatabase db = dbOpener.getWritableDatabase();
         // find all data and put them into message list
+
         this.findAllData(db);
 
         // get the "ListView" object
@@ -69,6 +71,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             this.sendMessage(db, chatContent,  adt, false, receiveBtn);
 
         });
+
     }
 
     private void sendMessage(SQLiteDatabase db, TextView chatContent,  ListAdapter adt,
@@ -118,6 +121,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             //add the new Contact to the array list:
             msgList.add(new Message(id, content, isSent));
         }
+
+        dbOpener.printCursor(results);
     }
 
     //This class needs 4 functions to work properly:
