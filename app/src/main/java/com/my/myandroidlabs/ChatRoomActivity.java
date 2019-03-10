@@ -96,7 +96,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         // reset textView to null
         chatContent.setText(null);
         //show a notification: first parameter is any view on screen. second parameter is the text. Third parameter is the length (SHORT/LONG)
-        Snackbar.make(buttonClicked, "Inserted item id:"+newId, Snackbar.LENGTH_LONG).show();
+       // Snackbar.make(buttonClicked, "Inserted item id:"+newId, Snackbar.LENGTH_LONG).show();
     }
 
     // to find all the data, and put them into message list
@@ -121,7 +121,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             //add the new Contact to the array list:
             msgList.add(new Message(id, content, isSent));
         }
-
+        // call printCursor() to print all the cursor results
         dbOpener.printCursor(results);
     }
 
