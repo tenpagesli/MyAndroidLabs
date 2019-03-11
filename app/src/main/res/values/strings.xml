@@ -22,4 +22,10 @@
     <string name="sendBtn">SEND</string>
     <string name="receiveBtn">RECEIVE</string>
     <string name="input_hint">Type here</string>
+    <string name="to_toolbar">Go to Toolbar page</string>
+    <string name="go_eating">go eating</string>
+    <string name="go_shopping">go shopping</string>
+    <string name="go_travelling">go travelling</string>
+    <string name="go_studying">go studying</string>
+    <string name="search">search</string>
 </resources>

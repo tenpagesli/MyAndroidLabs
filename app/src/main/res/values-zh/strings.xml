@@ -23,4 +23,10 @@
     <string name="sendBtn">发送</string>
     <string name="receiveBtn">接收</string>
     <string name="input_hint">在这里输入。。。</string>
+    <string name="to_toolbar">去工具条页面</string>
+    <string name="go_eating">去吃东西</string>
+    <string name="go_shopping">买买买</string>
+    <string name="go_travelling">去旅行</string>
+    <string name="go_studying">去学习</string>
+    <string name="search">搜索</string>
 </resources>

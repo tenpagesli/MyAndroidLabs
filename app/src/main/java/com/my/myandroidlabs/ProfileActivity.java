@@ -48,6 +48,12 @@ public class ProfileActivity extends AppCompatActivity {
             Intent nextPage = new Intent(ProfileActivity.this, ChatRoomActivity.class);
             startActivity(nextPage);
         });
+
+        Button toToolbarBtn = findViewById(R.id.toolbarBtn);
+        toToolbarBtn.setOnClickListener(c->{
+            Intent nextPage = new Intent(ProfileActivity.this, TestToolbar.class);
+            startActivity(nextPage);
+        });
     }
 
     @Override
