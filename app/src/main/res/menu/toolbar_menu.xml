@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/goEating"
+        android:title="@string/go_eating"
+        android:icon="@drawable/go_eating"
+        android:orderInCategory="300"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/goShopping"
+        android:title="@string/go_shopping"
+        android:icon="@drawable/go_shopping"
+        android:orderInCategory="200"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/goTravelling"
+        android:title="@string/go_travelling"
+        android:icon="@drawable/go_travelling"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/goStudying"
+        android:title="@string/go_studying"
+        android:orderInCategory="400"
+        app:showAsAction="never"/>
+
+
+    <item android:id="@+id/search_item"
+        app:actionViewClass="android.widget.SearchView"
+        android:icon="@android:drawable/ic_search_category_default"
+        app:showAsAction="always|collapseActionView"
+        android:title="@string/search"/>
+</menu>
