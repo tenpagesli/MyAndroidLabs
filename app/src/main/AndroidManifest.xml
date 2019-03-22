@@ -9,16 +9,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TestToolbar"></activity>
-        <activity android:name=".ChatRoomActivity"></activity>
+        <activity android:name=".WeatherForecast"></activity>
+        <activity android:name=".TestToolbar" />
+        <activity android:name=".ChatRoomActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.cst2335.com/rockandroid” -->
+                <data android:scheme="http"
+                    android:host="www.cst2335.com"
+                    android:pathPrefix="/myAndroidLabs" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!-- Accepts URIs that begin with "cst2335://myAndroidLabs” -->
+                <data android:scheme="cst2335"
+                    android:host="myAndroidLabs" />
             </intent-filter>
         </activity>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

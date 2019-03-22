@@ -54,6 +54,12 @@ public class ProfileActivity extends AppCompatActivity {
             Intent nextPage = new Intent(ProfileActivity.this, TestToolbar.class);
             startActivity(nextPage);
         });
+
+        Button toWeatherForecast = findViewById(R.id.weatherForecast);
+        toWeatherForecast.setOnClickListener(c->{
+            Intent nextPage = new Intent(ProfileActivity.this, WeatherForecast.class);
+            startActivity(nextPage);
+        });
     }
 
     @Override

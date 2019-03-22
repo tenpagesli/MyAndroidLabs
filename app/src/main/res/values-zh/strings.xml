@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lab5</string>
+    <string name="app_name">Lab7</string>
     <string name="hello_message">你好!</string>
     <string name="MyWidgetsText">这是我的小部件:</string>
     <string name="ButtonText">按键</string>
@@ -29,4 +29,5 @@
     <string name="go_travelling">去旅行</string>
     <string name="go_studying">去学习</string>
     <string name="search">搜索</string>
+    <string name="to_weather_forecast">天气预报</string>
 </resources>
