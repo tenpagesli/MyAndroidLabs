@@ -71,6 +71,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
      * @param c: the cursor
      */
     public void printCursor(Cursor c) {
+        c.moveToFirst();
         int totalColumnAmount = c.getColumnCount();
         String[] columns = c.getColumnNames();
         String columnNames = "";
@@ -96,5 +97,10 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
         }else{
             Log.i("in printCursor: ", "No results. The cursor is empty.");
         }
+    }
+
+    public boolean deleteRow(SQLiteDatabase db, long id)
+    {
+        return db.delete(TABLE_NAME, COL_ID + "=?", new String[]{id+""}) > 0;
     }
 }

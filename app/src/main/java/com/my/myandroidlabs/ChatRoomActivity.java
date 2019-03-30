@@ -1,6 +1,7 @@
 package com.my.myandroidlabs;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -23,30 +25,77 @@ import java.util.List;
 public class ChatRoomActivity extends AppCompatActivity {
     private Message msg;
     ArrayList<Message> msgList;
-    ListView theList;
     TextView content;
     //get a database:
     MyDatabaseOpenHelper dbOpener;
+    SQLiteDatabase db;
+    // the
+    ChatAdapter adt;
+
+    public static final String ITEM_SELECTED = "ITEM";
+    public static final String ITEM_POSITION = "POSITION";
+    public static final String ITEM_ID = "ID";
+    public static final int EMPTY_ACTIVITY = 345;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // get layout xml object
         setContentView(R.layout.activity_chat_room);
+
+
+
         // get message array list
         if (msgList == null) {
             msgList = new ArrayList<>();
         }
-
         //get a database:
         dbOpener = new MyDatabaseOpenHelper(this);
-        SQLiteDatabase db = dbOpener.getWritableDatabase();
-        // find all data and put them into message list
+        db = dbOpener.getWritableDatabase();
 
+        // find all data and put them into message list
         this.findAllData(db);
 
+
         // get the "ListView" object
-        theList = (ListView) findViewById(R.id.the_list);
+        ListView theList = (ListView)findViewById(R.id.the_list);
+        // get fragment
+        boolean isTablet = findViewById(R.id.fragmentLocation) != null; //check if the FrameLayout is loaded
+        // initial the adapter with chatting history list
+        adt = new ChatAdapter(msgList);
+        theList.setAdapter(adt); // the list should show up now
+
+        theList.setOnItemClickListener( (list, item, position, id) -> {
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString(ITEM_SELECTED, msgList.get(position).toString() );
+            dataToPass.putInt(ITEM_POSITION, position);
+            // dataToPass.putLong(ITEM_ID, msgList.get(position).getId());
+             dataToPass.putLong(ITEM_ID, id);
+
+            if(isTablet)
+            {
+                DetailFragment dFragment = new DetailFragment(); //add a DetailFragment
+                dFragment.setArguments( dataToPass ); //pass it a bundle for information
+                dFragment.setTablet(true);  //tell the fragment if it's running on a tablet or not
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragmentLocation, dFragment) //Add the fragment in FrameLayout
+                        .addToBackStack("AnyName") //make the back button undo the transaction
+                        .commit(); //actually load the fragment.
+            }
+            else //isPhone
+            {
+                Intent nextActivity = new Intent(ChatRoomActivity.this, EmptyActivity.class);
+                nextActivity.putExtras(dataToPass); //send data to next activity
+                startActivityForResult(nextActivity, EMPTY_ACTIVITY); //make the transition
+            }
+        });
+
+
+
+
+
         // get two buttons, and set on click listener for them
         Button sendBtn = findViewById(R.id.sendBtn);
         Button receiveBtn = findViewById(R.id.receiveBtn);
@@ -54,8 +103,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         TextView chatContent = findViewById(R.id.chatContent);
 
         // get the adapter
-        ListAdapter adt = new ChatAdapter(msgList);
-        theList.setAdapter(adt);
+//        ListAdapter adt = new ChatAdapter(msgList);
+//        theList.setAdapter(adt);
         if(!msgList.isEmpty()){
             ((ChatAdapter) adt).notifyDataSetChanged();
         }
@@ -72,6 +121,43 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    /**
+     *  delete the message from view list by it's id, and update the list
+     * @param id
+     */
+    public void deleteMessageId(int id)
+    {
+        Log.i("Delete this message:" , " id="+id);
+        String str="";
+        Cursor c;
+        String [] cols = {MyDatabaseOpenHelper.COL_ID, MyDatabaseOpenHelper.COL_CONTENT, MyDatabaseOpenHelper.COL_IS_SENT};
+        c = db.query(false, MyDatabaseOpenHelper.TABLE_NAME, cols, null, null, null, null, null, null);
+        if(c.moveToFirst()) {
+
+            for (int i =0; i<id; i++) {
+                c.moveToNext();
+
+            }
+            str = c.getString(c.getColumnIndex("_id"));
+        }
+        int x = db.delete("Message", "_id=?", new String[] {str});
+        Log.i("ViewContact", "Deleted " + x + " rows");
+        msgList.remove(id);
+        adt.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EMPTY_ACTIVITY && resultCode == RESULT_OK) {
+            // for phone, check if deleted a message
+           // Intent previousPage = getIntent();
+            long deletedId = data.getLongExtra("deletedId", 0);
+                // delete from database
+               // dbOpener.deleteRow(db, deletedId);
+                deleteMessageId((int)deletedId);
+        }
     }
 
     private void sendMessage(SQLiteDatabase db, TextView chatContent,  ListAdapter adt,
@@ -122,7 +208,9 @@ public class ChatRoomActivity extends AppCompatActivity {
             msgList.add(new Message(id, content, isSent));
         }
         // call printCursor() to print all the cursor results
-        dbOpener.printCursor(results);
+        if(results!=null){
+            dbOpener.printCursor(results);
+        }
     }
 
     //This class needs 4 functions to work properly:
@@ -184,7 +272,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         // get the item id for a specific position in the view list.
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
     }
 }

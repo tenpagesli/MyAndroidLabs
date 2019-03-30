@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <ListView
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:id="@+id/the_list"/>
+
+    <Button
+        android:id="@+id/sendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/the_list"
+        android:layout_alignRight="@id/the_list"
+        android:text="@string/sendBtn" />
+
+    <EditText android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:ems="11"
+        android:hint="@string/input_hint"
+        android:layout_alignBottom="@id/the_list"
+        android:layout_toRightOf="@id/receiveBtn"
+        android:id="@+id/chatContent"/>
+
+    <Button
+        android:id="@id/receiveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/the_list"
+        android:layout_alignLeft="@id/the_list"
+        android:text="@string/receiveBtn" />
+
+
+
+    <FrameLayout
+        android:id="@+id/fragmentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:layout_toRightOf="@id/the_list"/>
+</RelativeLayout>
