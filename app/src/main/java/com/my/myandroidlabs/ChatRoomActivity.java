@@ -135,10 +135,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         String [] cols = {MyDatabaseOpenHelper.COL_ID, MyDatabaseOpenHelper.COL_CONTENT, MyDatabaseOpenHelper.COL_IS_SENT};
         c = db.query(false, MyDatabaseOpenHelper.TABLE_NAME, cols, null, null, null, null, null, null);
         if(c.moveToFirst()) {
-
             for (int i =0; i<id; i++) {
                 c.moveToNext();
-
             }
             str = c.getString(c.getColumnIndex("_id"));
         }
@@ -209,7 +207,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
         // call printCursor() to print all the cursor results
         if(results!=null){
-            dbOpener.printCursor(results);
+            // dbOpener.printCursor(results);
         }
     }
 
